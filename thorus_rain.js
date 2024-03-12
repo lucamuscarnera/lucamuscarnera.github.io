@@ -1,20 +1,6 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Slow Fade</title>
-</head>
-<body>
-  <h1>Slow Fade</h1>
-  <div>
-    <canvas id="c"></canvas>
-  </div>
-</body>
-<script src='https://raw.githack.com/gpujs/gpu.js/develop/dist/gpu-browser.min.js'></script>
-
-<script>
-  const canvas = document.getElementById('c');
+  function thorus_rain(c)
+  {
+  const canvas = document.getElementById(c);
   const gpu = new window.GPU.GPU({
     canvas: canvas,
     mode: 'gpu'
@@ -40,7 +26,7 @@
 		let dx = this.thread.x*1. - x_pos;
 		let dy = this.thread.y*1. - y_pos;
 		
-		if(  dx*dx + dy*dy  < 2.)
+		if(  dx*dx + dy*dy  < 4.)
 				return 1;
 		return 0;
 	},
@@ -70,7 +56,7 @@
 
   const computation = gpu.createKernel(
 	function (data_prev,data,dim) {
-		let alfa = 0.999
+		let alfa = 0.9999
 		
 		let x = this.thread.x;
 		let y = this.thread.y;
@@ -182,7 +168,7 @@
 	data_k   = new_data_k;                              // copio il nuovo t nel vecchio t
 	
 	let data_k_next;
-	if( Math.random() > 0.50)
+	if( Math.random() > 0.90)
 	{
 		let x_pos = Math.floor(Math.random()  * dim)
 		let y_pos = Math.floor(Math.random()  * dim)
@@ -209,5 +195,4 @@
   };
 
   window.requestAnimationFrame(doDraw);
-</script>
-</html>
+  }

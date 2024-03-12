@@ -1,6 +1,6 @@
   function game_of_life(c)
   {
-  const canvas = document.getElementById('c');
+  const canvas = document.getElementById(c);
   const gpu = new window.GPU.GPU({
     canvas: canvas,
     mode: 'gpu'
