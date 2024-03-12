@@ -1,7 +1,7 @@
   function thorus_rain(c)
   {
   const canvas = document.getElementById(c);
-  const gpu = new window.GPU.GPU({
+  const gpu = init_GPU({
     canvas: canvas,
     mode: 'gpu'
   });
