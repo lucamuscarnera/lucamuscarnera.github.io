@@ -37,8 +37,10 @@
    const dirac_delta = gpu.createKernel(
 	function(x_pos,y_pos)
 	{
-		if(this.thread.x == x_pos)
-			if(this.thread.y == y_pos)
+		let dx = this.thread.x*1. - x_pos;
+		let dy = this.thread.y*1. - y_pos;
+		
+		if(  dx*dx + dy*dy  < 2.)
 				return 1;
 		return 0;
 	},
@@ -62,12 +64,14 @@
       useLegacyEncoder: true,
       output: [dim, dim],
       graphical: false,
-	  immutable: false
+	  immutable: true
     }
   ).setPipeline(true);
 
   const computation = gpu.createKernel(
 	function (data_prev,data,dim) {
+		let alfa = 0.99
+		
 		let x = this.thread.x;
 		let y = this.thread.y;
 		let h  = 0.01;
@@ -97,7 +101,7 @@
 		let u_xt            = data[y][x]
 		let u_xt_1          = data_prev[y][x]
 		
-		return  0.999 * ( (dt**2) * (laplaciano) + 2 * u_xt - u_xt_1);
+		return  alfa * ( (dt**2) * (laplaciano) + 2 * u_xt - u_xt_1);
 	}
     ,
     {
@@ -169,28 +173,32 @@
   interval = 10.
   
   
-  
- const aggiungi_goccia = gpu.combineKernels(sum,  dirac_delta, function(data_k,x_pos,y_pos) {
-  return sum(data_k, dirac_delta(x_pos,y_pos));
-});
 
-
-  const doDraw = () => {
-	let data_tmp = data_k.clone();	
-	data_k = computation(data_k_1,data_k,dim);
-	data_k_1.delete();
-	data_k_1 = data_tmp.clone();
-	data_tmp.delete();
+  const doDraw = () => {	
+	let new_data_k = computation(data_k_1,data_k,dim);  // costruisco il nuovo t
+	data_k_1.delete();                                  // distruggo il t - 1
+	data_k_1 = data_k.clone()                           // copio il vecchio t in t - 1
+	data_k.delete();                                    // distruggo il vecchio t
+	data_k   = new_data_k;                              // copio il nuovo t nel vecchio t
 	
-	
-	data_k_next = data_k.clone()
+	let data_k_next;
 	if( Math.random() > 0.50)
 	{
 		let x_pos = Math.floor(Math.random()  * dim)
 		let y_pos = Math.floor(Math.random()  * dim)
-		data_k_next   = aggiungi_goccia(data_k,x_pos,y_pos);
+		let dd    = dirac_delta(x_pos,y_pos);
+		data_k_next   = sum(data_k, dd);  // costruisco il nuovo nuovo t
+		dd.delete();
+		data_k.delete();
+	} else
+	{
+		data_k_next   = data_k;
 	}
-    graphics(data_k_next);
+	
+	//data_k.delete();	 // distruggo il vecchio nuovo t
+    graphics(data_k_next); // plot
+	data_k = data_k_next;
+	//data_k_next.delete();
 	//data_k_next.delete();
 	
 	//data_tmp.delete();
