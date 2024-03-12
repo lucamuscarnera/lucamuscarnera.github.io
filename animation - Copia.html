@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Slow Fade</title>
+</head>
+<body>
+  <h1>Slow Fade</h1>
+  <div>
+    <canvas id="c"></canvas>
+  </div>
+</body>
+<script src='https://raw.githack.com/gpujs/gpu.js/develop/dist/gpu-browser.min.js'></script>
+
+<script>
+  const canvas = document.getElementById('c');
+  const gpu = new window.GPU.GPU({
+    canvas: canvas,
+    mode: 'gpu'
+  });
+  const dim = 512;
+  
+  const computation = gpu.createKernel(
+	function (x) {
+		return 0.001 + x[this.thread.y][this.thread.y];
+	}
+    ,
+    {
+      useLegacyEncoder: true,
+      output: [dim, dim],
+      graphical: false,
+	  immutable: true
+    }
+  ).setPipeline(true);
+  
+  
+  
+  const graphics = gpu.createKernel(
+    function(x) {
+      this.color(
+        x[this.thread.y][this.thread.x],
+        x[this.thread.y][this.thread.x],
+        x[this.thread.y][this.thread.x],
+        1
+      );
+    },
+    {
+      useLegacyEncoder: true,
+      output: [dim, dim],
+      graphical: true
+    }
+  );
+
+  const zeros = (m, n) => [...Array(m)].map(e => Array(n).fill(0));
+
+
+  let data = zeros(dim,dim);
+  const doDraw = () => {
+	data = computation(data);
+    graphics(data);
+    window.requestAnimationFrame(doDraw);
+  };
+
+  window.requestAnimationFrame(doDraw);
+</script>
+</html>
