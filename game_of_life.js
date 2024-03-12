@@ -63,6 +63,21 @@
     }
   );
 
+
+ const random = gpu.createKernel(
+    function() {
+	  let x = Math.random()
+	  if ( x < 0.1)
+		  return 1;
+      return 0;
+    },
+    {
+      useLegacyEncoder: true,
+      output: [dim, dim],
+      graphical: false,
+	  immutable : true
+    }
+  ).setPipeline(true);
   
 	function random_init(rows, columns) {
 	  const randomArray = [];
@@ -79,11 +94,16 @@
 	  return randomArray;
 	}
 
-  let data = random_init(dim,dim);
+  let data = random();
+
   interval = 10
   const doDraw = () => {
-	data = computation(data);
+	let new_data = computation(data);  // costruisco un nuovo fram e
+	data.delete()                      // cancello quello vecchio 
+	data = new_data;                   // metto quello nuovo dentro quello vecchio
     graphics(data);
+	
+	
 	setTimeout(() => {
 	   window.requestAnimationFrame(doDraw)
 	}, interval);
