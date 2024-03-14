@@ -42,11 +42,20 @@ Array.prototype.min = function() {
 ///// ASCII-ART
 
 var ascii_arts = document.getElementsByClassName("ascii-art")
+for(var i = 0; i < ascii_arts.length;i++)
+{
+	// il titolo dovrebbe essere sempre un decimo dell'altezza dello schermo
+	ascii_arts[i].style.fontSize = "10px";
+}
+
+///// CONTAINERS
+var containers = document.getElementsByClassName("container")
 for(var i = 0; i < titoli.length;i++)
 {
 	// il titolo dovrebbe essere sempre un decimo dell'altezza dello schermo
-	ascii_arts[i].style.fontSize = min(7, W*W/500) + "px";
+	containers[i].style.maxWidth = min(W,W*W) + "px";
 }
+
 
 }
 
