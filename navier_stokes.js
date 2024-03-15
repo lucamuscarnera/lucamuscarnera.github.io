@@ -14,14 +14,16 @@ function navier_stokes(c)
   var x_pos = dim_x/10;
   
 
-
+  var dragged = false;
+  canvas.onmousedown = function() {dragged = true}
+  canvas.onmouseup = function() {dragged = false}
 
   canvas.onpointermove = function(e)
   {
 	mousex = event.clientX;
 	rect = canvas.getBoundingClientRect();
-	
-	x_pos = Math.floor( (mousex - rect.x)/0.65 );
+	if(dragged)
+	x_pos = Math.floor( (mousex - rect.x)/rect.width * dim_x );
   }
  
   /* ALCUNI KERNEL UTILI*/
