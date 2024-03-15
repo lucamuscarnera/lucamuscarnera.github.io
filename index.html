@@ -70,6 +70,18 @@
 	  margin-left: auto;
 	  margin-right: auto;
 	}
+
+	.figure_banner
+	{
+	  width : 120vmin;
+	  height: 30vmin;
+      /*border:solid;*/
+	  display: block;
+	  margin-top: 1vmin;
+	  margin-bottom: 1vmin;
+	  margin-left: auto;
+	  margin-right: auto;
+	}
 	
 	.didascalia
 	{
@@ -190,6 +202,38 @@ game_of_life('c');
 
 <!-- PAGINA  FINALE -->
 <div class='page'>
+		<div class = 'title'>But more in general...</div>
+		<canvas id = 'navier' class= 'figure_banner'></canvas>
+
+		<div class='container'>
+			<div class='didascalia'>
+			<b>Compressible Navier Stokes</b>
+			<br>
+			Real time (Forward Euler) finite differences simulation of Compressible Navier Stokes Equation, by means of a stabilized version of 
+			the Langtangen numerical scheme. Compressibility allow to model behavior of objects moving throu non-incompressible fluids like air in a more
+			accurate way. Like in the previous figure, simulation is running through shaders, thanks to the gpu.js library.
+			</div>
+		</div>
+		
+		<div class='container'>
+				<div class = 'text'>
+				<br>
+				What I really enjoy about HPC is the ability of making abstractions real, through the power of simulation 
+				and modelling.<br>
+				I'm always eager to learn something new, and bring it to life through coding.
+				</div>
+		</div>
+</div>
+<script src='navier_stokes.js'></script>
+<script>
+// CARICO L'ANIMAZIONE
+navier_stokes('navier');
+</script>
+
+
+
+<!-- PAGINA  FINALE -->
+<div class='page'>
 		<div class = 'title'>Thank you for your time.</div>
 		<canvas id = 't' class= 'figure'></canvas>
 
@@ -197,7 +241,7 @@ game_of_life('c');
 			<div class='didascalia'>
 			<b>"Rain over a torus puddle"</b>
 			<br>
-			Simulation of rain on torus \(\mathbb T^2\) world. Randomly, the simulation modifies the computational domain in order to simulate rain
+			Real time simulation of rain on torus \(\mathbb T^2\) world. Randomly, the simulation modifies the computational domain in order to simulate rain
 			creating temporary boundaries inside the region.Position of the impulse follow the distribution \( {\bf x} \sim \mathcal U(\mathbb T^2) \).
 			The toroidal topology allow waves to travel freely from one side to the other.
 			</div>

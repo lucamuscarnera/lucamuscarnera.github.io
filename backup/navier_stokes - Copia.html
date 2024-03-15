@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Slow Fade</title>
+</head>
+<body>
+  <h1>Slow Fade</h1>
+  <div>
+    <canvas id="c"></canvas>
+  </div>
+</body>
+<script src='https://raw.githack.com/gpujs/gpu.js/develop/dist/gpu-browser.min.js'></script>
+
+<script>
+  /* INIZIALIZZO L'AMBIENTE */
+  const canvas = document.getElementById('c');
+  const gpu = new window.GPU.GPU({
+    canvas: canvas,
+    mode: 'gpu'
+  });
+  const dim = 512;
+  
+  /* ALCUNI KERNEL UTILI*/
+  // zero kernel
+  const zero = gpu.createKernel(
+	function()
+	{
+		return 0
+	},
+	{
+	  useLegacyEncoder: true,
+	  output: [dim, dim],
+	  graphical: false,
+	  immutable: false
+	}
+  ).setPipeline(true);
+  
+  const const_init = gpu.createKernel(
+	function(k)
+	{
+		return k
+	},
+	{
+	  useLegacyEncoder: true,
+	  output: [dim, dim],
+	  graphical: false,
+	  immutable: true
+	}
+  ).setPipeline(true);
+    
+  
+  // somma di matrici
+  const sum = gpu.createKernel(
+	function (A,B) {
+		let x = this.thread.x;
+		let y = this.thread.y;
+		return A[y][x] + B[y][x]
+	}
+    ,
+    {
+      useLegacyEncoder: true,
+      output: [dim, dim],
+      graphical: false,
+	  immutable: true
+    }
+  ).setPipeline(true);
+</script>
+
+<script>
+
+// immutable assignment : supponiamo di avere uno statemente
+// nella forma
+// 
+//       A = f(A,...)
+//
+// É possibile unicamente se il kernel é IMMUTABILE, ma dobbiamo gestire la
+// memoria
+
+function apply_overwrite(f,data)
+{
+	let new_data = f(data);  		   // costruisco un nuovo frame
+	data.delete()                      // cancello quello vecchio 
+	return new_data;
+}
+
+
+</script>
+
+
+
+
+<script>  
+  // costruisco la funzione che forza le condizioni al bordo
+  // per u_x
+  const ux_boundary = gpu.createKernel(
+	function (u_xt,dim) {
+		let x = this.thread.x;
+		let y = this.thread.y;
+		
+		let norma = (x - dim/2)**2 + (y - dim/2)**2
+		if( norma < 300 )
+		{
+			return 0;
+		}
+		else
+		{
+			if(x < 10)
+			{
+				return 1.;
+			}
+			else
+			{
+				if((y == 0) || (y == (dim - 1)) || (x > (dim - 100)))
+				{
+					return 0;
+				}
+			}
+			return u_xt[y][x];
+		}
+	}
+    ,
+    {
+      useLegacyEncoder: true,
+      output: [dim, dim],
+      graphical: false,
+	  immutable: true
+    }
+  ).setPipeline(true);
+
+
+  // per u_y
+  const uy_boundary = gpu.createKernel(
+	function (u_yt,dim) {
+		let x = this.thread.x;
+		let y = this.thread.y;
+		
+		let norma = (x - dim/2)**2 + (y - dim/2)**2
+		if( norma < 300 )
+		{
+			return 0;
+		}
+		else
+		{
+			if(x < 10)
+			{
+				return 0;
+			}
+			else
+			{
+				if((y == 0) || (y == (dim - 1)) || (x > (dim - 100)))
+				{
+					return 0;
+				}
+			}
+			return u_yt[y][x];
+		}
+	}
+    ,
+    {
+      useLegacyEncoder: true,
+      output: [dim, dim],
+      graphical: false,
+	  immutable: true
+    }
+  ).setPipeline(true);
+  // costruisco i kernel che prendono in ingresso le soluzioni all'istante t - 1
+  // e restituiscono la soluzione all'istante t
+  // U_x
+  const computation_u_xt = gpu.createKernel(
+	function (u_xt_1,u_yt_1,p_t_1,dim,rho,nu,h,dt) {
+		let x = this.thread.x;
+		let y = this.thread.y;
+		if(x > 0 && x < (dim - 1))
+		{
+			if( y > 0 && y < (dim - 1))
+			{
+				let dudx_xt_1 = (u_xt_1[y][x + 1] - u_xt_1[y][x - 1])/(2 * h)
+				let dudy_xt_1 = (u_xt_1[y + 1][x] - u_xt_1[y - 1][x])/(2 * h)
+				let dpdx      = (p_t_1[y][x + 1] - p_t_1[y][x - 1])/(2 * h)
+				
+				let dudxx_xt_1 = (u_xt_1[y][x + 1] - 2 * u_xt_1[y][x] + u_xt_1[y][x - 1])/(h*h)
+				let dudyy_xt_1 = (u_xt_1[y + 1][x] - 2 * u_xt_1[y][x] + u_xt_1[y - 1][x])/(h*h)
+				let dudxx_yt_1 = (u_yt_1[y][x + 1] - 2 * u_yt_1[y][x] + u_yt_1[y][x - 1])/(h*h)
+				let dudyy_yt_1 = (u_yt_1[y + 1][x] - 2 * u_yt_1[y][x] + u_yt_1[y - 1][x])/(h*h)
+				
+				let laplaciano = dudxx_xt_1 + dudyy_xt_1;
+				
+				return u_xt_1[y][x] - dt * ( u_xt_1[y][x] * dudx_xt_1 + u_yt_1[y][x] * dudy_xt_1 + 1/rho * dpdx - nu * laplaciano );
+			}
+		}
+		return u_xt_1[y][x]; // se la sbrigano le boundary  conditions
+	}
+    ,
+    {
+      useLegacyEncoder: true,
+      output: [dim, dim],
+      graphical: false,
+	  immutable: true
+    }
+  ).setPipeline(true);
+
+  // U_y
+  const computation_u_yt = gpu.createKernel(
+	function (u_xt_1,u_yt_1,p_t_1,dim,rho,nu,h,dt) {
+		let x = this.thread.x;
+		let y = this.thread.y;
+		if(x > 0 && x < (dim - 1))
+		{
+			if( y > 0 && y < (dim - 1))
+			{
+				let dudx_yt_1 = (u_yt_1[y][x + 1] - u_yt_1[y][x - 1])/(2 * h)
+				let dudy_yt_1 = (u_yt_1[y + 1][x] - u_yt_1[y - 1][x])/(2 * h)
+				let dpdy      = (p_t_1[y + 1][x] - p_t_1[y - 1][x])/(2 * h)
+
+				let dudxx_xt_1 = (u_xt_1[y][x + 1] - 2 * u_xt_1[y][x] + u_xt_1[y][x - 1])/(h*h)
+				let dudyy_xt_1 = (u_xt_1[y + 1][x] - 2 * u_xt_1[y][x] + u_xt_1[y - 1][x])/(h*h)
+				let dudxx_yt_1 = (u_yt_1[y][x + 1] - 2 * u_yt_1[y][x] + u_yt_1[y][x - 1])/(h*h)
+				let dudyy_yt_1 = (u_yt_1[y + 1][x] - 2 * u_yt_1[y][x] + u_yt_1[y - 1][x])/(h*h)
+				
+				let laplaciano = dudxx_yt_1 + dudyy_yt_1;
+				
+				return u_yt_1[y][x]  - dt * ( u_xt_1[y][x] * dudx_yt_1 + u_yt_1[y][x] * dudy_yt_1 + 1./rho * dpdy - nu * laplaciano );
+			}
+		}
+		return u_xt_1[y][x]; // se la sbrigano le boundary  conditions
+	}
+    ,
+    {
+      useLegacyEncoder: true,
+      output: [dim, dim],
+      graphical: false,
+	  immutable: true
+    }
+  ).setPipeline(true); 
+ 
+  // p_y
+  const computation_p_t = gpu.createKernel(
+	function (u_xt_1,u_yt_1,p_t_1,dim, rho,nu,h,dt) {
+		let x = this.thread.x;
+		let y = this.thread.y;
+		if(x > 0 && x < (dim - 1))
+		{
+			if( y > 0 && y < (dim - 1))
+			{
+				let dudx_xt_1 = (u_xt_1[y][x + 1] - u_xt_1[y][x - 1])/(2 * h)
+				let dudy_yt_1 = (u_yt_1[y + 1][x] - u_yt_1[y - 1][x])/(2 * h)
+				let Du = dudx_xt_1  + dudy_yt_1
+				return p_t_1[y][x] - rho * Du
+			}
+		}
+		return p_t_1[y][x];
+	}
+    ,
+    {
+      useLegacyEncoder: true,
+      output: [dim, dim],
+      graphical: false,
+	  immutable: true
+    }
+  ).setPipeline(true); 
+ 
+  const graphics = gpu.createKernel(
+    function(u_xt,u_yt) {
+	  let c = u_xt[this.thread.y][this.thread.x]**2 + u_yt[this.thread.y][this.thread.x]**2;
+      this.color(
+          c ,
+          c ,
+          c ,
+        1
+      );
+    },
+    {
+      useLegacyEncoder: true,
+      output: [dim, dim],
+      graphical: true,
+	  immutable: false
+    }
+  );
+
+ 
+
+  let u_x = const_init(0.);
+  let u_y = const_init(0.);
+  let p   = const_init(0.);  
+  
+  interval = 1.
+  
+  param = 0.
+  const doDraw = () => {	
+  
+  	let rho = 1000.;
+	let nu  = 1.;
+	let dt = 5e-5;
+	let h  = 1e-1;
+		
+	let new_u_x = ux_boundary(u_x,dim);
+	u_x.delete();
+	u_x = new_u_x;
+	
+	let new_u_y = uy_boundary(u_y,dim);
+	u_y.delete();
+	u_y = new_u_y;
+
+	
+	new_u_x = computation_u_xt(u_x,u_y,p,dim,rho,nu,h,dt);
+	new_u_y = computation_u_yt(u_x,u_y,p,dim,rho,nu,h,dt);
+	new_p   = computation_p_t(u_x,u_y,p,dim,rho,nu,h,dt);
+	
+	u_x.delete();
+	u_y.delete();
+	p.delete();
+	
+	u_x = new_u_x;
+	u_y = new_u_y;
+	p   = new_p;
+	
+	new_u_x = ux_boundary(u_x,dim);
+	u_x.delete();
+	u_x = new_u_x;
+	
+	new_u_y = uy_boundary(u_y,dim);
+	u_y.delete();
+	u_y = new_u_y;
+
+
+	graphics(u_x,u_y)
+	
+	
+	setTimeout(() => {
+	   window.requestAnimationFrame(doDraw)
+	}, interval);
+  };
+
+  window.requestAnimationFrame(doDraw);
+</script>
+</html>
