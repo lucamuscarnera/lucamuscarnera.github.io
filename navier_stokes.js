@@ -2,13 +2,28 @@ function navier_stokes(c)
 {
   /* INIZIALIZZO L'AMBIENTE */
   const canvas = document.getElementById(c);
+
+  
   const gpu = new window.GPU.GPU({
     canvas: canvas,
     mode: 'gpu'
   });
   const dim_x = 1024;
   const dim_y = 256;
+ 
+  var x_pos = dim_x/10;
   
+
+
+
+  canvas.onpointermove = function(e)
+  {
+	mousex = event.clientX;
+	rect = canvas.getBoundingClientRect();
+	
+	x_pos = Math.floor( (mousex - rect.x)/0.65 );
+  }
+ 
   /* ALCUNI KERNEL UTILI*/
   // zero kernel
   const zero = gpu.createKernel(
@@ -74,11 +89,11 @@ function apply_overwrite(f,data)
   // costruisco la funzione che forza le condizioni al bordo
   // per u_x
   const ux_boundary = gpu.createKernel(
-	function (u_xt,p_t,h,dim_x,dim_y) {
+	function (x_pos,u_xt,p_t,h,dim_x,dim_y) {
 		let x = this.thread.x;
 		let y = this.thread.y;
 		
-		let norma = Math.abs(x - dim_x/10)**2 + Math.abs(y - dim_y/2)**2
+		let norma = Math.abs(x - x_pos)**2 + Math.abs(y - dim_y/2)**2
 		if( norma < 100 )
 		{
 			return 0;
@@ -120,11 +135,11 @@ function apply_overwrite(f,data)
 
   // per u_y
   const uy_boundary = gpu.createKernel(
-	function (u_yt,dim_x,dim_y) {
+	function (x_pos,u_yt,dim_x,dim_y) {
 		let x = this.thread.x;
 		let y = this.thread.y;
 		
-		let norma =  Math.abs(x - dim_x/10)**2 + Math.abs(y - dim_y/2)**2
+		let norma =  Math.abs(x - x_pos)**2 + Math.abs(y - dim_y/2)**2
 		if( norma < 100 )
 		{
 			return 0;
@@ -344,11 +359,11 @@ function apply_overwrite(f,data)
 	let dt = 1.0e-2;
 	let h  = 1.0;
 		
-	let new_u_x = ux_boundary(u_x,p,h,dim_x,dim_y);
+	let new_u_x = ux_boundary(x_pos,u_x,p,h,dim_x,dim_y);
 	u_x.delete();
 	u_x = new_u_x;
 	
-	let new_u_y = uy_boundary(u_y,dim_x,dim_y);
+	let new_u_y = uy_boundary(x_pos,u_y,dim_x,dim_y);
 	u_y.delete();
 	u_y = new_u_y;
 
