@@ -17,11 +17,12 @@
 	  align-items: center;
 	  text-align: center;
 	}  
-	body
+	html,body
 	{
 		font-family: "computer modern", sans-serif;
 		background-color:white;
 		color:rgb(50,50,50);
+		max-width: 100%;
 		overflow-x: hidden;
 	}
 	
@@ -96,7 +97,16 @@
 	}
 	.item
 	{
-
+	}
+	.preview
+	{
+		border:solid 1px;
+		width:50vmin;
+		height:50vmin;
+		margin-top:auto;
+		margin-bottom:auto;
+		margin-left: auto;
+	    margin-right: auto;
 	}
 	</style>
 </head>
@@ -210,23 +220,47 @@ game_of_life('c');
 <div class='page'>
 	<div class = 'title'>Some projects that I had fun making</div>
 	<div class = 'container'>
-	<ul class='list'>
-		<li class='item'> A Network Theoretical Approach on Drug Discovery </li>
-		<li class='item'> Cache Usage Optimization for Voxel Grids by PCA </li>
-		<li class='item'> Neural Network Sparsification through a Greedy Low-Dimensional Manifold Embedding</li>
-		<li class='item'> Entropy-based latent representation perturbations for kernel regression in a generative framework</li>
-		<li class='item'> ADHD diagnosis as anomaly detection</li>
-		<li class='item'> A surrogate optimization approach for protein stabilization</li>
-	</ul>
+		<ul class='list'>
+			<li class='item'> A Network Theoretical Approach on Drug Discovery </li>
+			<li class='item'> Cache Usage Optimization for Voxel Grids by PCA </li>
+			<li class='item'> Neural Network Sparsification through a Greedy Low-Dimensional Manifold Embedding</li>
+			<li class='item'> Entropy-based latent representation perturbations for kernel regression in a generative framework</li>
+			<li class='item'> ADHD diagnosis as anomaly detection</li>
+			<li class='item'> A surrogate optimization approach for protein stabilization</li>
+		</ul>
+	</div>
+	<div class = 'container'>
+		<div class = 'preview'>
+			ciao
+		</div>
 	</div>
 </div>
 
 <div class='page'>
 	<div class = 'title'>Some personal projects i'm working on</div>
+	<div class = 'container'>
+		<ul class = 'list'>
+				<li class='item'> Algebraic Multigrid heuristics validation </li>
+				<li class='item'> <i>Learning to rank</i> as a maximum likelihood estimation of a non differentiable function</li>
+				<li class='item'> High Performance Montecarlo Simulation for non parametric returns in financial markets </li>
+				<li class='item'> <b> My master thesis (no spoilers!) </b>  </li>
+		</ul>
+	</div>
 </div>
 
 <div class='page'>
 	<div class = 'title'>Some topics I'd love to work on</div>
+		<div class = 'container'>
+		<ul class = 'list'>
+				<li class='item'> Deterministic & Stochastic Optimal Control </li>
+				<li class='item'> Protein Folding & Protein Engineering </li>
+				<li class='item'> Parallelization of numerical algorithms & performance sensitive machine learning </li>
+				<li class='item'> Theoretical Mathematics for deep learning (Abstract Algebra,Functional Analysis,Measure Theory...)</li>
+				<li class='item'> Experimental Machine Learning Algorithms & Experimental Generative Artificial Intelligence</li>
+				<li class='item'> Discrete & Continuous ( \(n- \)derivatives based) global optimization </li>
+				<li class='item'> High Performance Data Structures and algorithms (and heuristics)</li>
+		</ul>
+		</div>
 </div>
 
 

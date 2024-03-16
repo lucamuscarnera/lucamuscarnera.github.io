@@ -2,7 +2,7 @@ function navier_stokes(c)
 {
   /* INIZIALIZZO L'AMBIENTE */
   const canvas = document.getElementById(c);
-
+  canvas.style.touchAction = 'none';
   
   const gpu = new window.GPU.GPU({
     canvas: canvas,
@@ -17,12 +17,24 @@ function navier_stokes(c)
   var dragged = false;
  
 
-  canvas.onpointermove = function(e)
-  {
+	let mouseIsDown = false;
+
+	canvas.onpointerdown = function(e) {
+		mouseIsDown = true;
+	}
+	
+
+	document.onpointerup = function(e) {
+		mouseIsDown = false;
+	}
+	
+	canvas.onpointermove = function(e)
+	{
 	mousex = event.clientX;
 	rect = canvas.getBoundingClientRect();
-	x_pos = Math.floor( (mousex - rect.x)/rect.width * dim_x );
-  }
+	if(mouseIsDown)
+		x_pos = Math.floor( (mousex - rect.x)/rect.width * dim_x );
+	}
  
   /* ALCUNI KERNEL UTILI*/
   // zero kernel
