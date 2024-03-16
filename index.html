@@ -6,7 +6,7 @@
 <script type="text/javascript" id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
 </script>
-<script src='prettylist.js'></script>
+<script src='prettylist.js' defer></script>
 <head>
 	<!-- ... -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,19 +24,21 @@
 		color:rgb(50,50,50);
 		max-width: 100%;
 		overflow-x: hidden;
+		display:inline-block;
+		vertical-align:middle;
 	}
 	
 	.page
 	{
 		width: 100vw;
 		height: 100vh;
+		display: inline-block;
+		vertical-align: middle;
 	}
 	
 	.title
 	{
-		width:100%;
 		font-size:5vmin;
-		text-align:center;
 		font-weight:bold;
 		padding-bottom:1vmin;
 		padding-top:1vmin;
@@ -44,7 +46,6 @@
 	
 	.ascii
 	{
-	width: 100%;
 	font-size:0.73vmin;
 	text-align:center;
 	font-family:courier;
@@ -53,35 +54,39 @@
 	
 	.container
 	{
-	margin-left: 1.5vw;
+	/*margin-left: 1.5vw;*/
 	width: 95vw;
 	font-size:3vmin;
 	text-align:center;
 	padding-top:1vmin;
+	
+	  display:inline-block;
+	  vertical-align: middle;
 	}
 	
+
 	.figure
 	{
 	  width : 60vmin;
 	  height: 60vmin;
       /*border:solid;*/
-	  display: block;
 	  margin-top: 1vmin;
 	  margin-bottom: 1vmin;
-	  margin-left: auto;
-	  margin-right: auto;
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+	  display: block;
 	}
 
-	.figure_banner
+	.figure_banner 
 	{
-	  width : 120vmin;
-	  height: 30vmin;
+	  width : 100vmin;
+	  height: 25vmin;
       /*border:solid;*/
-	  display: block;
 	  margin-top: 1vmin;
 	  margin-bottom: 1vmin;
-	  margin-left: auto;
-	  margin-right: auto;
 	}
 	
 	.didascalia
@@ -94,24 +99,32 @@
 	{
 	  display: inline-block;
 	  text-align: left;
+
 	}
 	.item
 	{
 	}
 	.preview
 	{
-		border:solid 1px;
-		width:50vmin;
-		height:50vmin;
-		margin-top:auto;
-		margin-bottom:auto;
-		margin-left: auto;
-	    margin-right: auto;
+		width: 100vw;
+		height: 50vmin;
+		font-size:3vmin;
+		text-align:center;
+		padding-top:1vmin;
+		//border:solid 1px;
+		display:inline-block;
+		vertical-align: middle;
+	}
+	.preview_description
+	{
+	  display: inline-block;
+	  text-align: left;
 	}
 	</style>
 </head>
 
 <div class='page'>
+		<div class='container'>
 	<div class='title'>
 		Ciao!
 		I'm Luca Muscarnera
@@ -176,6 +189,7 @@
 			%%%%################################################################################################<br>
 			%%%%#%##############################################################################################<br>
 		</div>
+		</div>
 	<div class='container'>
 		<div class = 'text'>
 	I am an HPC Engineering student @ Politecnico di Milano, Italy. 
@@ -189,13 +203,17 @@ Currently planning to pursue a PhD in Numerical Optimization & Computational Mat
 
 <!-- PAGINA  1 -->
 <div class='page'>
-		<div class = 'title'>A pervasive view on High Performance Computing</div>
-		<canvas id = 'c' class= 'figure'></canvas>
-
+		<div class='container'>
+			<div class = 'title'>A pervasive view on High Performance Computing</div>
+		</div>
+		<div class ='container'>
+			<canvas id = 'c' class= 'figure'></canvas>
+		</div>
+		
 		<div class='container'>
 			<div class='didascalia'>
-			Game of life, running on GPU through WebGL shaders, implemented via gpu.js, real time simulation.
-			Every configuration that you obtain is almost unique, with a probability of appearing \(\approx 10^{-78913.2071}\)
+				Game of life, running on GPU through WebGL shaders, implemented via gpu.js, real time simulation.
+				Every configuration that you obtain is almost unique, with a probability of appearing \(\approx 10^{-78913.2071}\)
 			</div>
 		</div>
 		
@@ -218,26 +236,53 @@ game_of_life('c');
 
 
 <div class='page'>
-	<div class = 'title'>Some projects that I had fun making</div>
+	<div class='container'>
+		<div class = 'title'>Some projects that I had fun making</div>
+	</div>
 	<div class = 'container'>
-		<ul class='list'>
-			<li class='item'> A Network Theoretical Approach on Drug Discovery </li>
-			<li class='item'> Cache Usage Optimization for Voxel Grids by PCA </li>
+		<ul class='list' data='preview_miei_progetti'>
+			<li class='item' 
+				data='An information theoretical framework for predicting the interaction between drugs and diseases.
+					  Starting from a mathematical model, a parallel algorithm is produced and tested, in order to verify the ability
+					  in extracting information abount bipartite drug-diseases graphs.' 
+				link='https://github.com/lucamuscarnera/ComplexNetworkProject' > A Network Theoretical Approach on Drug Discovery </li>
+			<li class='item'
+				data="Voxelizations of 3D objects require to appear in memory as a flatten vector, due to 
+				structure of RAM memories.
+				This produces unbalanced access times on objects that are equally close; given a point \({\bf x}\) consider the set
+				\(B_\epsilon({\bf x})\) each object in this set induces a different line passing by \({\bf x}\) and each direction
+				could be less or more preferrable by means of data locality. 
+				Analyzing docking algorithms' trends in accessing protein voxelizations, an heuristics to optimize data locality is proposed.
+				"
+				link='https://github.com/giuseppeegentile/voxelization_hpc' 
+			> Cache Usage Optimization for Voxel Grids by PCA </li>
 			<li class='item'> Neural Network Sparsification through a Greedy Low-Dimensional Manifold Embedding</li>
-			<li class='item'> Entropy-based latent representation perturbations for kernel regression in a generative framework</li>
+			<li class='item'
+				data = "Suppose to have a sample of data \(X \in \mathbb R^{N \times m}\) belonging to some unknown distribution \(\mathscr D.\)
+						Given a collection of random points \(X' \in \mathbb R^{N \times p} \), with \(p << m\), sampled by a known distribution, let us say \(\mathscr K_{X'}\), it is always possible to produce
+						a mapping \(\hat y_X: X' \mapsto X\), using a kernel regression algorithm like kernel ridge regression.
+						After finding the optimal (in a very precise sense) \(X'\) for accomplishing the aforementioned task, a \(\textbf{Langevin-Metropolis}\) algorithm is used
+						to sample on an estimate of \(\mathscr K_{X'}\) obtained by means of a modified version of kernel density estimation.
+						This sampling in the latent space, along with the map \(y_X\), allows us to generate new data and perform data interpolation.
+						"
+				link = 'about:blank'
+			> Entropy-based latent representation perturbations for kernel regression in a generative framework</li>
 			<li class='item'> ADHD diagnosis as anomaly detection</li>
 			<li class='item'> A surrogate optimization approach for protein stabilization</li>
 		</ul>
 	</div>
 	<div class = 'container'>
-		<div class = 'preview'>
-			ciao
+		<div class = 'preview' id='preview_miei_progetti'>
+			<div class = 'preview_link'></div>
+			<div class = 'preview_description'></div>
 		</div>
 	</div>
 </div>
 
 <div class='page'>
-	<div class = 'title'>Some personal projects i'm working on</div>
+	<div class='container'>
+		<div class = 'title'>Some personal projects i'm working on</div>
+	</div>
 	<div class = 'container'>
 		<ul class = 'list'>
 				<li class='item'> Algebraic Multigrid heuristics validation </li>
@@ -249,7 +294,9 @@ game_of_life('c');
 </div>
 
 <div class='page'>
-	<div class = 'title'>Some topics I'd love to work on</div>
+		<div class='container'>
+			<div class = 'title'>Some topics I'd love to work on</div>
+		</div>
 		<div class = 'container'>
 		<ul class = 'list'>
 				<li class='item'> Deterministic & Stochastic Optimal Control </li>
@@ -266,9 +313,12 @@ game_of_life('c');
 
 <!-- PAGINA  FINALE -->
 <div class='page'>
-		<div class = 'title'>But more in general...</div>
-		<canvas id = 'navier' class= 'figure_banner'></canvas>
-
+		<div class='container'>
+			<div class = 'title'>But more in general...</div>
+		</div>
+		<div class='container'>
+			<canvas id = 'navier' class= 'figure_banner'></canvas>
+		</div>
 		<div class='container'>
 			<div class='didascalia'>
 			<b>Compressible Navier Stokes</b>
@@ -303,9 +353,12 @@ navier_stokes('navier');
 
 <!-- PAGINA  FINALE -->
 <div class='page'>
-		<div class = 'title'>Thank you for your time.</div>
-		<canvas id = 't' class= 'figure'></canvas>
-
+		<div class='container'>
+			<div class = 'title'>Thank you for your time.</div>
+		</div>
+		<div class='container'>
+			<canvas id = 't' class= 'figure'></canvas>
+		</div>
 		<div class='container'>
 			<div class='didascalia'>
 			<b>"Rain over a torus puddle"</b>
