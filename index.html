@@ -259,8 +259,10 @@ game_of_life('c');
 				structure of RAM memories.
 				This produces unbalanced access times on objects that are equally close; given a point \({\bf x}\) consider the set
 				\(B_\epsilon({\bf x})\) each object in this set induces a different line passing by \({\bf x}\) and each direction
-				could be less or more preferrable by means of data locality. 
-				Analyzing docking algorithms' trends in accessing protein voxelizations, an heuristics to optimize data locality is proposed.
+				could be less or more preferrable by means of data locality (the memory mapping makes points sampled
+				in a certain direction extremely clustered into memory and point sampled in another direction very far away from each other
+				in the \(\textbf{address space}\))
+				Analyzing docking algorithms' trends an heuristics to optimize data locality is proposed.
 				"
 				link='https://github.com/giuseppeegentile/voxelization_hpc' 
 			> Cache Usage Optimization for Voxel Grids by PCA </li>
@@ -326,9 +328,10 @@ game_of_life('c');
 				data = '
 				I am trying to construct a proof of concept of the usage of nonparametric statistics in simulation of the evolution
 				of financial assets.In fact, often, gaussianity of returns is assumed and
-				i am really interested in understanding "what happens" if this hypothesis is removed.
+				I am really interested in understanding "what happens" if this hypothesis is removed 
+				(e.g. exotic distributions of returns on large temporal horizons)
 				I am trying to approach this problem in order to build a more solid grasp on stochastic processes and
-				montecarlo simulation for scenario sampling.
+				montecarlo simulation for scenario sampling, not necessarly in a financial context.
 				'
 				link = 'NO'
 				> High Performance Montecarlo Simulation for non parametric returns in financial markets </li>
@@ -388,7 +391,8 @@ game_of_life('c');
 				<br>
 				What I really enjoy about HPC is the ability of making abstractions real, through the power of simulation 
 				and modelling.<br>
-				I'm always eager to learn something new, and bring it to life through the power of coding and scientific computing.
+				I'm always eager to learn something new, and bring it to life using coding and scientific computing as tools,
+				trying to understand always what is the most efficient way (from a computational perspective).
 				<br>
 				<br>
 				<br>
@@ -396,9 +400,13 @@ game_of_life('c');
 				</div>
 		</div>
 		<div class = 'container'>
-			<img src='icons/linkedin_logo.png' style = 'filter:grayscale(100%);filter:contrast(2.);width:5vmin;height:5vmin;'></img>
+			<a href='https://www.linkedin.com/in/lucamuscarnera/' target="blank" style='text-decoration:none'>
+				<img src='icons/linkedin_logo.png' style = 'filter:grayscale(100%);filter:contrast(5.);width:5vmin;height:5vmin;'></img>
+			</a>
 			<img style='width:5vw'> </img>
-			<img src='icons/github-mark.svg'  style = 'filter:grayscale(100%);filter:contrast(2.);width:5vmin;height:5vmin;'></img>
+			<a href='https://github.com/lucamuscarnera'  target="blank" style='text-decoration:none'>
+				<img src='icons/github-mark.svg'  style = 'filter:grayscale(100%);filter:contrast(2.);width:5vmin;height:5vmin;'></img>
+			</a>
 		</div>
 </div>
 <script src='navier_stokes.js'></script>
