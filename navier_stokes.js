@@ -4,7 +4,7 @@ function navier_stokes(c)
   const canvas = document.getElementById(c);
   canvas.style.touchAction = 'none';
   
-  const gpu = new window.GPU.GPU({
+  const gpu = init_GPU({
     canvas: canvas,
     mode: 'gpu'
   });
