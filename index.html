@@ -43,6 +43,13 @@
 		padding-bottom:1vmin;
 		padding-top:1vmin;
 	}
+	.subtitle
+	{
+		font-size:2vmin;
+		font-weight:bold;
+		padding-bottom:1vmin;
+		padding-top:1vmin;
+	}
 	
 	.ascii
 	{
@@ -238,6 +245,7 @@ game_of_life('c');
 <div class='page'>
 	<div class='container'>
 		<div class = 'title'>Some projects that I had fun making</div>
+		<div class = 'subtitle'>click the items in the list to find more details...</div>
 	</div>
 	<div class = 'container'>
 		<ul class='list' data='preview_miei_progetti'>
@@ -259,7 +267,7 @@ game_of_life('c');
 			<li class='item'> Neural Network Sparsification through a Greedy Low-Dimensional Manifold Embedding</li>
 			<li class='item'
 				data = "Suppose to have a sample of data \(X \in \mathbb R^{N \times m}\) belonging to some unknown distribution \(\mathscr D.\)
-						Given a collection of random points \(X' \in \mathbb R^{N \times p} \), with \(p << m\), sampled by a known distribution, let us say \(\mathscr K_{X'}\), it is always possible to produce
+						Given a collection of random points \(X' \in \mathbb R^{N \times p} \), with \(p << m\) and sampled by a known distribution, let us say \(\mathscr K_{X'}\), it is always possible to produce
 						a mapping \(\hat y_X: X' \mapsto X\), using a kernel regression algorithm like kernel ridge regression.
 						After finding the optimal (in a very precise sense) \(X'\) for accomplishing the aforementioned task, a \(\textbf{Langevin-Metropolis}\) algorithm is used
 						to sample on an estimate of \(\mathscr K_{X'}\) obtained by means of a modified version of kernel density estimation.
@@ -346,7 +354,14 @@ game_of_life('c');
 <script src='navier_stokes.js'></script>
 <script>
 // CARICO L'ANIMAZIONE
+try
+{
 navier_stokes('navier');
+}
+catch(err)
+{
+alert(err);
+}
 </script>
 
 
