@@ -25,8 +25,12 @@ gestisce classi css di tipo lista creando l'animazione quando si clicca
 			{
 				var preview_id = this.getAttribute('preview')
 				var preview = document.getElementById(preview_id);
-
-				preview.getElementsByClassName('preview_link')[0].innerHTML = "<a href='"+ this.getAttribute('link') + "'>"+this.innerText+"</a>";
+				
+				var  link = this.getAttribute('link')
+				if(link != 'NO')
+					preview.getElementsByClassName('preview_link')[0].innerHTML = "<a href='"+ link + "'>"+this.innerText+"</a>";
+				else
+					preview.getElementsByClassName('preview_link')[0].innerHTML = "<b>"+this.innerText+"</b>";
 				var descrizione = preview.getElementsByClassName('preview_description')[0]
 				descrizione.innerText = "\n " +  this.getAttribute('data');
 				

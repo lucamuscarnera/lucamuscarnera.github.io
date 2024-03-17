@@ -1,4 +1,4 @@
-  function game_of_life(c)
+function game_of_life(c)
   {
   const canvas = document.getElementById(c);
   const gpu = init_GPU({
@@ -67,7 +67,7 @@
  const random = gpu.createKernel(
     function() {
 	  let x = Math.random()
-	  if ( x < 0.1)
+	  if ( x < 0.5)
 		  return 1;
       return 0;
     },

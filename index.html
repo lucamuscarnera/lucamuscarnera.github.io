@@ -266,7 +266,7 @@ game_of_life('c');
 			> Cache Usage Optimization for Voxel Grids by PCA </li>
 			<li class='item'> Neural Network Sparsification through a Greedy Low-Dimensional Manifold Embedding</li>
 			<li class='item'
-				data = "Suppose to have a sample of data \(X \in \mathbb R^{N \times m}\) belonging to some unknown distribution \(\mathscr D.\)
+				data = "Suppose to have a sample of data \(X \in \mathbb R^{N \times m}\) belonging to some unknown distribution \(\mathscr D\).
 						Given a collection of random points \(X' \in \mathbb R^{N \times p} \), with \(p << m\) and sampled by a known distribution, let us say \(\mathscr K_{X'}\), it is always possible to produce
 						a mapping \(\hat y_X: X' \mapsto X\), using a kernel regression algorithm like kernel ridge regression.
 						After finding the optimal (in a very precise sense) \(X'\) for accomplishing the aforementioned task, a \(\textbf{Langevin-Metropolis}\) algorithm is used
@@ -292,12 +292,57 @@ game_of_life('c');
 		<div class = 'title'>Some personal projects i'm working on</div>
 	</div>
 	<div class = 'container'>
-		<ul class = 'list'>
-				<li class='item'> Algebraic Multigrid heuristics validation </li>
-				<li class='item'> <i>Learning to rank</i> as a maximum likelihood estimation of a non differentiable function</li>
-				<li class='item'> High Performance Montecarlo Simulation for non parametric returns in financial markets </li>
-				<li class='item'> <b> My master thesis (no spoilers!) </b>  </li>
+		<ul class = 'list' data = 'preview_progetti_in_corso'>
+				<li class='item'
+				data = 'Algebraic Multigrid, historically, has been proposed as an heuristic method, in terms of rationale and motivations.
+				I am currently trying to develop a theory, using matrix calculus, to study why it works.
+				My objective is to find the inner motivation of the improvement offered by the method, hoping that
+				it can help in solving ill-conditioned linear systems.
+				'
+				link = 'NO'
+				> Algebraic Multigrid heuristics validation </li>
+				<li class='item'
+				data = '
+				Given \(\epsilon\), a function \(f:\mathcal X \rightarrow \mathcal Y\), where \(\mathcal Y\) is a set
+				endowed with a total order relation \(\preccurlyeq_Y\), is a good \(\textbf{ranking function}\) with
+				respect to a certain function \(g:\mathcal X \rightarrow \mathcal Z\), where \(\mathcal Z\) is a set
+				endowed with a total order relation \(\preccurlyeq_Z\), if
+				$$
+					\mathbb P \left[ f(x) \preccurlyeq_Y f(y) \iff g(x) \preccurlyeq_Z g(y) \right]
+					>
+					1 - \epsilon
+				$$
+				Hence, if we imagine that \(f\) is a model depending on a set of parameters \(\theta\), we can formulate
+				$$
+					\underset{\theta}{\textrm{max }} \mathbb P \left[ f_{\theta}(x) \preccurlyeq_Y f_{\theta}(y) \iff g(x) \preccurlyeq_Z g(y) \right]
+					=
+					\underset{\theta}{\textrm{max }} \mathbb E \left[ ( f_{\theta}(x) - f_{\theta}(y) )( g(x) - g(y) ) \right]
+				$$
+				which can be solved estimating the probability and adopting a gradient free optimization algorithm.
+				'
+				link = 'NO'
+				> <i>Learning to rank</i> as a maximum likelihood estimation of a non differentiable function</li>
+				<li class='item'
+				data = '
+				I am trying to construct a proof of concept of the usage of nonparametric statistics in simulation of the evolution
+				of financial assets.In fact, often, gaussianity of returns is assumed and
+				i am really interested in understanding "what happens" if this hypothesis is removed.
+				I am trying to approach this problem in order to build a more solid grasp on stochastic processes and
+				montecarlo simulation for scenario sampling.
+				'
+				link = 'NO'
+				> High Performance Montecarlo Simulation for non parametric returns in financial markets </li>
+				<li class='item'
+				data = '.. / .-.. .. -.- . / -.-. ..- .-. .. --- ..- ... / .--. . --- .--. .-.. . --..-- / .-- . .-.. .-.. / -.. --- -. . -.-.--'
+				link = 'NO'
+				> <b> My master thesis (no spoilers!) </b>  </li>
 		</ul>
+	</div>
+	<div class = 'container'>
+		<div class = 'preview' id='preview_progetti_in_corso'>
+			<div class = 'preview_link'></div>
+			<div class = 'preview_description'></div>
+		</div>
 	</div>
 </div>
 
@@ -349,6 +394,11 @@ game_of_life('c');
 				<br>
 				If you want, feel free to reach me though my channels. I am always happy to discuss science and algorithms.
 				</div>
+		</div>
+		<div class = 'container'>
+			<img src='icons/linkedin_logo.png' style = 'filter:grayscale(100%);filter:contrast(2.);width:5vmin;height:5vmin;'></img>
+			<img style='width:5vw'> </img>
+			<img src='icons/github-mark.svg'  style = 'filter:grayscale(100%);filter:contrast(2.);width:5vmin;height:5vmin;'></img>
 		</div>
 </div>
 <script src='navier_stokes.js'></script>

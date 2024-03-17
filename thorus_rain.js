@@ -56,7 +56,7 @@
 
   const computation = gpu.createKernel(
 	function (data_prev,data,dim) {
-		let alfa = 0.9999
+		let alfa = 0.999
 		
 		let x = this.thread.x;
 		let y = this.thread.y;
