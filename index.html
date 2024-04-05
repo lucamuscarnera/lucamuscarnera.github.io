@@ -26,6 +26,7 @@
 		overflow-x: hidden;
 		display:inline-block;
 		vertical-align:middle;
+		scroll-behavior: smooth;
 	}
 	
 	.page
@@ -130,7 +131,7 @@
 	</style>
 </head>
 
-<div class='page'>
+<div class='page' id="page_0">
 		<div class='container'>
 	<div class='title'>
 		Ciao!
@@ -206,10 +207,13 @@ Currently planning to pursue a PhD in Numerical Optimization & Computational Mat
 <b>My dream is to make optimization computationally affordable enough to be used in Medicine on a daily basis.</b>
 		</div>
 	</div>
+	<div class='container'>
+		<a href="#page_1">&gt; &gt; &gt;</a>
+	</div>
 </div>
 
 <!-- PAGINA  1 -->
-<div class='page'>
+<div class='page' id="page_1">
 		<div class='container'>
 			<div class = 'title'>A pervasive view on High Performance Computing</div>
 		</div>
@@ -232,6 +236,10 @@ Currently planning to pursue a PhD in Numerical Optimization & Computational Mat
 				As you will see, my projects often try to take a little bit from both these amazing subjects.
 				</div>
 		</div>
+		<div class='container'>
+			<a href="#page_0">&lt; &lt; &lt;</a>
+			<a href="#page_2">&gt; &gt; &gt;</a>
+		</div>
 </div>
 <script src='game_of_life.js'></script>
 <script>
@@ -242,7 +250,7 @@ game_of_life('c');
 
 
 
-<div class='page'>
+<div class='page' id="page_2">
 	<div class='container'>
 		<div class = 'title'>Some projects that I had fun making</div>
 		<div class = 'subtitle'>click the items in the list to find more details...</div>
@@ -289,9 +297,14 @@ game_of_life('c');
 			<div class = 'preview_description'></div>
 		</div>
 	</div>
+	
+	<div class='container'>
+		<a href="#page_1">&lt; &lt; &lt;</a>
+		<a href="#page_3">&gt; &gt; &gt;</a>
+	</div>
 </div>
 
-<div class='page'>
+<div class='page' id="page_3">
 	<div class='container'>
 		<div class = 'title'>Some personal projects i'm working on</div>
 	</div>
@@ -352,9 +365,14 @@ game_of_life('c');
 			<div class = 'preview_description'></div>
 		</div>
 	</div>
+	
+	<div class='container'>
+		<a href="#page_2">&lt; &lt; &lt;</a>
+		<a href="#page_4">&gt; &gt; &gt;</a>
+	</div>	
 </div>
 
-<div class='page'>
+<div class='page' id="page_4">
 		<div class='container'>
 			<div class = 'title'>Some topics I'd love to work on</div>
 		</div>
@@ -369,11 +387,17 @@ game_of_life('c');
 				<li class='item'> High Performance Data Structures and algorithms (and heuristics)</li>
 		</ul>
 		</div>
+		
+			
+	<div class='container'>
+		<a href="#page_3">&lt; &lt; &lt;</a>
+		<a href="#page_5">&gt; &gt; &gt;</a>
+	</div>	
 </div>
 
 
-<!-- PAGINA  FINALE -->
-<div class='page'>
+
+<div class='page' id="page_5">
 		<div class='container'>
 			<div class = 'title'>But more in general...</div>
 		</div>
@@ -413,6 +437,12 @@ game_of_life('c');
 				<img src='icons/github-mark.svg'  style = 'filter:grayscale(100%);filter:contrast(2.);width:5vmin;height:5vmin;'></img>
 			</a>
 		</div>
+		
+		
+		<div class='container'>
+			<a href="#page_4">&lt; &lt; &lt;</a>
+			<a href="#page_6">&gt; &gt; &gt;</a>
+		</div>	
 </div>
 <script src='navier_stokes.js'></script>
 <script>
@@ -425,7 +455,7 @@ navier_stokes('navier');
 
 
 <!-- PAGINA  FINALE -->
-<div class='page'>
+<div class='page' id="page_6">
 		<div class='container'>
 			<div class = 'title'>Thank you for your time.</div>
 		</div>
@@ -441,6 +471,10 @@ navier_stokes('navier');
 			The toroidal topology allow waves to travel freely from one side to the other.
 			</div>
 		</div>
+		
+		<div class='container'>
+			<a href="#page_5">&lt; &lt; &lt;</a>
+		</div>	
 </div>
 <script src='thorus_rain.js'></script>
 <script>
