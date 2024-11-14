@@ -1,0 +1,157 @@
+<!-- ProtoLaTex -->
+<script src='https://raw.githack.com/gpujs/gpu.js/develop/dist/gpu-browser.min.js'></script>
+<script src='init_gpu.js'></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<script src='prettylist.js' defer></script>
+<head>
+	<!-- ... -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="font.css">	
+	<style>
+	.center {
+	  justify-content: center;
+	  align-items: center;
+	  text-align: center;
+	}  
+	html,body
+	{
+		font-family: "computer modern", sans-serif;
+		background-color:white;
+		color:rgb(50,50,50);
+		max-width: 100%;
+		overflow-x: hidden;
+		display:inline-block;
+		vertical-align:middle;
+		scroll-behavior: smooth;
+	}
+	
+	.page
+	{
+		width: 100vw;
+		height: 100vh;
+		display: inline-block;
+		vertical-align: middle;
+	}
+	
+	.title
+	{
+		font-size:5vmin;
+		font-weight:bold;
+		padding-bottom:1vmin;
+		padding-top:1vmin;
+	}
+	.subtitle
+	{
+		font-size:2vmin;
+		font-weight:bold;
+		padding-bottom:1vmin;
+		padding-top:1vmin;
+	}
+	
+	.ascii
+	{
+	font-size:0.73vmin;
+	text-align:center;
+	font-family:courier;
+	padding-bottom: 5vmin;
+	}
+	
+	.container
+	{
+	/*margin-left: 1.5vw;*/
+	width: 95vw;
+	font-size:3vmin;
+	text-align:center;
+	padding-top:1vmin;
+	
+	  display:inline-block;
+	  vertical-align: middle;
+	}
+	
+
+	.figure
+	{
+	  width : 60vmin;
+	  height: 60vmin;
+      /*border:solid;*/
+	  margin-top: 1vmin;
+	  margin-bottom: 1vmin;
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+	  display: block;
+	}
+
+	.figure_banner 
+	{
+	  width : 100vmin;
+	  height: 25vmin;
+      /*border:solid;*/
+	  margin-top: 1vmin;
+	  margin-bottom: 1vmin;
+	}
+	
+	.didascalia
+	{
+	font-style:italic;
+	font-size:2vmin;
+	}
+	
+	.list
+	{
+	  display: inline-block;
+	  text-align: left;
+
+	}
+	.item
+	{
+	}
+	.preview
+	{
+		width: 100vw;
+		height: 50vmin;
+		font-size:3vmin;
+		text-align:center;
+		padding-top:1vmin;
+		//border:solid 1px;
+		display:inline-block;
+		vertical-align: middle;
+	}
+	.preview_description
+	{
+	  display: inline-block;
+	  text-align: left;
+	}
+	</style>
+</head>
+
+
+<div class='page' id="page_0">
+		<div class='container'>
+			<div class = 'title'>Thank you for your time.</div>
+		</div>
+		<div class='container'>
+			<canvas id = 't' class= 'figure'></canvas>
+		</div>
+		<div class='container'>
+			<div class='didascalia'>
+				<b>Ising Model</b>
+			</div>
+		</div>
+		
+		<div class='container'>
+			<a href="#page_5">&lt; &lt; &lt;</a>
+		</div>	
+</div>
+
+<script src='ising.js'></script>
+<script>
+// CARICO L'ANIMAZIONE
+ising('t');
+</script>
