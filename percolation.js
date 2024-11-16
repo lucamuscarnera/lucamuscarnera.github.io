@@ -1,40 +1,41 @@
-function game_of_life(c)
+function percolation(c)
   {
   const canvas = document.getElementById(c);
   const gpu = init_GPU({
     canvas: canvas,
     mode: 'gpu'
   });
-  const dim = 512;
+  const dim = 1024;
   
   const computation = gpu.createKernel(
 	function (x) {
-		let v = x[ this.thread.y ][this.thread.x ];
-		let c = 0; // numero di vicini
-		for ( let i = - 1;i <= 1;i++)
-			{
-			for ( let j = - 1; j <= 1;j++)
-				{
-					if( ( this.thread.y +i > 0 ) && ( this.thread.x + j > 0 ))
-						if( ( this.thread.y + i < (512-1) ) && ( this.thread.x + j < (512-1) ))
-							if( !(i == 0 && j == 0))
-								c += x[ this.thread.y + i ][this.thread.x + j]
-				}
-			}
+		let c = x[ this.thread.y ][this.thread.x]; // numero di vicini
 		
-		if(c < 2)
-			return 0;
-		else 
-			if ( c >= 2 && c <= 3)
-			{
-				if(c == 3)
-				{
-					return 1;
-				}
-				return x[ this.thread.y ][this.thread.x ]
-			}
-			else
-				return 0;
+		for ( let i = - 1;i <= 1;i++)
+		{
+			if(this.thread.y + i > 0 )
+				if( this.thread.y + i < (1024-1))
+					if(!(i == 0))
+						if(c <= x[ this.thread.y + i ][this.thread.x])
+							if(x[ this.thread.y + i ][this.thread.x] >= 0) // flag "buco"
+								c = x[ this.thread.y + i ][this.thread.x]
+		}
+
+		
+		for ( let j = - 1;j <= 1;j++)
+		{
+				if(this.thread.x + j > 0 )
+					if( this.thread.x + j < (1024-1))
+						if(!(j == 0))
+							if(c <= x[ this.thread.y][this.thread.x + j])
+								if(x[ this.thread.y][this.thread.x + j] >= 0) // flag "buco"
+									c = x[this.thread.y][this.thread.x + j]
+		}
+		
+		if(x[this.thread.y][this.thread.x] > 0) // se era uno pieno
+			return c;
+		else
+			return -1;
 	}
     ,
     {
@@ -49,12 +50,14 @@ function game_of_life(c)
   
   const graphics = gpu.createKernel(
     function(x) {
-      this.color(
-        1-x[this.thread.y][this.thread.x],
-        1-x[this.thread.y][this.thread.x],
-        1-x[this.thread.y][this.thread.x],
-        1
-      );
+	  if(x[this.thread.y][this.thread.x] > 0)
+		this.color(
+			1 - x[this.thread.y][this.thread.x] / (1024*1024),
+			1 - x[this.thread.y][this.thread.x]/ (1024*1024),
+			1 - x[this.thread.y][this.thread.x]/ (1024*1024),1
+		);
+	  else
+		this.color(0,0,0,1);
     },
     {
       useLegacyEncoder: true,
@@ -67,9 +70,9 @@ function game_of_life(c)
  const random = gpu.createKernel(
     function() {
 	  let x = Math.random()
-	  if ( x < 0.5)
-		  return 1;
-      return 0;
+	  if(x < 0.6) // probabilitá di accensione
+		  return this.thread.y * 1024 + this.thread.x;
+	  return -1
     },
     {
       useLegacyEncoder: true,
@@ -79,24 +82,10 @@ function game_of_life(c)
     }
   ).setPipeline(true);
   
-	function random_init(rows, columns) {
-	  const randomArray = [];
-
-	  for (let i = 0; i < rows; i++) {
-		const row = [];
-		for (let j = 0; j < columns; j++) {
-		  // Generate a random number (either 0 or 1)
-		  const randomNumber = Math.random();
-		  row.push(randomNumber);
-		}
-		randomArray.push(row);
-	  }
-	  return randomArray;
-	}
 
   let data = random();
 
-  interval = 10
+  interval = 0
   const doDraw = () => {
 	let new_data = computation(data);  // costruisco un nuovo fram e
 	data.delete()                      // cancello quello vecchio 

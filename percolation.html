@@ -134,7 +134,7 @@
 <!-- PAGINA  1 -->
 <div class='page' id="page_1">
 		<div class='container'>
-			<div class = 'title'>A pervasive view on High Performance Computing</div>
+			<div class = 'title'>How does it work?</div>
 		</div>
 		<div class ='container'>
 			<canvas id = 'c' class= 'figure'></canvas>
@@ -142,17 +142,15 @@
 		
 		<div class='container'>
 			<div class='didascalia'>
-				Game of life, running on GPU through WebGL shaders, implemented via gpu.js, real time simulation.
-				Every configuration that you obtain is almost unique, with a probability of appearing \(\approx 10^{-78913.2071}\)
+				Parallel Percolation Simulation, Close to critical phase. Each site is initialized with a certain probability as a hole or a filled cavity, and the percolation 
+				model allows to study diffusion of fluid among neighbouring sites. Near to criticality, the model exhibits a non trivial structure (scale free distribution of clusters)
 			</div>
 		</div>
 		
 		<div class='container'>
 				<div class = 'text'>
 				<br>
-				I have a B.Sc. in Computer Engineering (Politecnico di Milano) and in the last two years I decided to
-				specialize also in Mathematics, not as a Minor but rather in the sense of a "Parallel Major". <br>
-				As you will see, my projects often try to take a little bit from both these amazing subjects.
+				A continuous investigation in the mechanics that governate reality, models and data
 				</div>
 		</div>
 		<div class='container'>
@@ -163,7 +161,7 @@
 <script src='percolation.js'></script>
 <script>
 // CARICO L'ANIMAZIONE
-game_of_life('c');
+percolation('c');
 </script>
 	
 
