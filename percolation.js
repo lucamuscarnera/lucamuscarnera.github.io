@@ -87,9 +87,12 @@ function percolation(c)
 
   interval = 0
   const doDraw = () => {
-	let new_data = computation(data);  // costruisco un nuovo fram e
-	data.delete()                      // cancello quello vecchio 
-	data = new_data;                   // metto quello nuovo dentro quello vecchio
+	for(let i = 0 ; i < 5;i ++)				// plotto la percolazione ogni 5 iterazioni per speed up
+	{
+		let new_data = computation(data);  // costruisco un nuovo frame
+		data.delete()                      // cancello quello vecchio 
+		data = new_data;                   // metto quello nuovo dentro quello vecchio
+	}
     graphics(data);
 	
 	

@@ -1,6 +1,7 @@
 <!-- ProtoLaTex -->
 <script src='https://raw.githack.com/gpujs/gpu.js/develop/dist/gpu-browser.min.js'></script>
 <script src='init_gpu.js'></script>
+<script src="observe.js"></script>
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 
 <script type="text/javascript" id="MathJax-script" async
@@ -244,7 +245,7 @@ Currently planning to pursue a PhD to study the Mathematics of Deep Learning.
 <script src='game_of_life.js'></script>
 <script>
 // CARICO L'ANIMAZIONE
-game_of_life('c');
+whenVisible('c',game_of_life);
 </script>
 	
 
@@ -280,7 +281,7 @@ game_of_life('c');
 <script src='percolation.js'></script>
 <script>
 // CARICO L'ANIMAZIONE
-percolation('percolation');
+whenVisible('percolation',percolation);
 </script>
 
 
@@ -478,9 +479,7 @@ percolation('percolation');
 <script src='navier_stokes.js'></script>
 <script>
 // CARICO L'ANIMAZIONE
-
-navier_stokes('navier');
-
+whenVisible('navier',navier_stokes);
 </script>
 
 
@@ -510,5 +509,5 @@ navier_stokes('navier');
 <script src='thorus_rain.js'></script>
 <script>
 // CARICO L'ANIMAZIONE
-thorus_rain('t');
+whenVisible('t',thorus_rain);
 </script>
