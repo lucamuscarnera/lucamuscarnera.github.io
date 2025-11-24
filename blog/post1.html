@@ -17,13 +17,34 @@ body {
 
 <center>
     <h1>
-        Why are large weights associated to overfitting?
+        Why do we fear large norms in machine learning?
     </h1>
     <h2 style = "color:rgb(94, 93, 93)">
-        Phenomenology of large norms in trained machine learning models
+        Phenomenology of regularization in trained machine learning models
     </h2>
+    <h4>Luca Muscarnera</h4>
+    <h5>University of Cambridge</h5>
 </center>
 
+<h3> Prelude </h3>
+
+Theory of norm based regularization is often taken in the machine
+learning community as a dogmatic truth. The empirical success of weight decay
+and norm-based regularization techniques has reinforced the idea that large weights 
+are somehow associated to overfitting, and thus controlling the magnitude of those weights 
+can, somehow, prevent a machine learning model from memorizing the training data.
+<br>
+Surprisingly, this axiom appears to be universal: from linear models to deep neural networks, large
+weights are stigmatized in almost a folkrore way. Literature on norm-based generalization bounds
+has furtherly reinforced this idea, providing theoretical guarantees on the generalization error
+of models with small norms. However, a phenomenological understanding of what component of overfitting causes large weights is missing. 
+
+We know that large weights are associated with stronger model capacity, but why 
+machine learning models achieve this stronger capacity in first place as a response to overfittable data 
+is still an open question. 
+
+In the following post I express my personal view on this topic, providing a simple phenomenological explanation 
+based on linear models, which I then try to reconcile with more modern deep learning methods. 
 
 <h3> The Linear Interpolant Experiment </h3>
 
@@ -57,7 +78,7 @@ $$
 
 We note an important fact. When targets are completely random, the expected norm of the weights is dominated by the smallest eigenvalue of the Gram matrix \(\mathbf X \mathbf X^\top\).
 In some sense, the learned vector is inheriting the singularities of the data matrix, which can be very small in high dimension.
-Assuming for instance $\mathbf X$ to be an isotropic random matrix, we can furtherly refine our estimate
+Assuming for instance \(\mathbf X\) to be an isotropic random matrix, we can furtherly refine our estimate
 $$
 \begin{align*}
 \mathbb E_{
@@ -71,8 +92,96 @@ $$
     \mathbf X 
     \sim 
     \mathcal N(\mathbf 0, \mathbf I_P \otimes \mathbf I_N)
-} \left[ \sum_{i=1}^P \frac{1}{\lambda_i} \right] 
+} \left[ \sum_{i=1}^P \frac{1}{\lambda_i(\mathbf X \mathbf X^\top)} \right] 
  = \frac{P}{N - P}
 \end{align*}
 $$ 
-</html>
+
+Interestingly, we obtain a divergence of the expected norm of the weights when \(P \to N\) from below, consistently with classical
+double descent phenomenology observed in machine learning models [Vallet, 1989]. 
+
+Let us now consider a second case, where targets are generated from a teacher model, and thus
+
+$$
+    \boldsymbol y_{teacher} = \mathbf X \boldsymbol w_{teacher},
+$$
+in this case the norm of the vector is deterministic and obtained as follows
+$$
+\begin{align*}
+\| \hat{\boldsymbol w} \|^2_2 
+&= \hat{\boldsymbol w}^\top \hat{\boldsymbol w}  \\
+&= \boldsymbol y_{teacher}^\top (\mathbf X \mathbf X^\top)^{-1} \mathbf X \mathbf X^\top (\mathbf X \mathbf X^\top)^{-1} \boldsymbol y_{teacher} \\
+&= \boldsymbol w_{teacher}^\top \mathbf X^\top (\mathbf X \mathbf X^\top)^{-1} \mathbf X \mathbf X^\top (\mathbf X \mathbf X^\top)^{-1} \mathbf X^\top \boldsymbol w_{teacher} \\
+\end{align*}
+$$
+defining \(\mathbf X = \mathbf U \mathbf \Sigma \mathbf V^\top \) as the SVD decomposition of the data matrix we obtain
+$$
+\begin{align*}
+\| \hat{\boldsymbol w} \|^2_2
+&= \boldsymbol w_{teacher}^\top 
+    \mathbf V \mathbf \Sigma^\top \mathbf U^\top 
+    (\mathbf U \mathbf \Sigma \mathbf V^\top 
+     \mathbf V \mathbf \Sigma \mathbf U^\top)^{-1} 
+    \mathbf U \mathbf \Sigma \mathbf V^\top
+     \mathbf V \mathbf \Sigma \mathbf U^\top
+    (\mathbf U \mathbf \Sigma \mathbf V^\top \mathbf V \mathbf \Sigma \mathbf U^\top)^{-1} \mathbf V \mathbf \Sigma \mathbf U^\top \boldsymbol w_{teacher} \\
+&= \boldsymbol w_{teacher}^\top \mathbf V \mathbf \Sigma^\top (\mathbf \Sigma \mathbf \Sigma^\top)^{-1} \mathbf \Sigma \mathbf V^\top \boldsymbol w_{teacher} \\
+&= \boldsymbol w_{teacher}^\top \mathbf V  \mathbf V^\top \boldsymbol w_{teacher} \\
+&= \| \mathbf V^\top \boldsymbol w_{teacher}  \|^2_2     
+\end{align*}
+$$
+
+Surprisingly, in this case the norm of the learned weights does not depend on the singular values of the data matrix.
+This implies that, when targets are generated from a teacher model, the learned weights do not inherit the singularities of the data matrix, and thus do not diverge around the interpolation threshold.
+
+
+Moreover, employing the typical uniform approximation of eigenvectors in random matrices we obtain the estimate
+$$
+\begin{align*}
+\mathbb E_{
+    \mathbf V
+}
+[ \| \mathbf V^\top \boldsymbol w_{teacher} \|^2_2 ]
+& \sim 
+\sum_i^P 
+\mathbb E^2_{\boldsymbol v} [\boldsymbol v^\top \boldsymbol w_{teacher}]
+\\
+& 
+\sim 
+\frac{P}{N} 
+\| \boldsymbol w_{teacher} \|^2_2
+\end{align*}
+$$
+
+This estimate, as crude as it is, provides as an important insight. 
+In linear models, learning from pure noise forces weights to diverge at the interpolation threshold, while 
+learning from organical targets prevents such divergence, keeping the norm of the weights under control.
+
+<h3> What's happening in large \(N\) ? </h3>
+
+Assume now that 
+$$
+\| \boldsymbol w_{teacher} \|^2 = 1
+$$
+such that, if \(\mathbf X\) is a Gaussian matrix then 
+$$
+y^{teacher}_i = \boldsymbol x_i^\top \boldsymbol w_{teacher} \sim \mathcal N(\mathbf 0, 1)
+$$
+
+Morally, the empirical distributions of \(\boldsymbol y_{teacher}\) and 
+\(\boldsymbol y_{overfit}\) are identical, but the conditioning on the data matrix $\mathbf X$ has a very different effect, in fact
+
+$$
+\delta_{\mathbf X \boldsymbol w_{teacher}} = P(y^{teacher}_i | \mathbf X) \neq P(y^{overfit}_i | \mathbf X)
+= 
+P(y^{overfit}_i) \ \ \ \forall i
+$$
+
+
+
+
+
+We note that in the large \(N\) limit
+$$
+\frac{P}{N} \sim \frac{P}{N - P}
+$$
