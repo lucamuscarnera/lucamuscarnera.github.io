@@ -173,7 +173,7 @@ learning from organical targets prevents such divergence, keeping the norm of th
 </font>
 </center>
 
-<h3> What's happening in large \(N\) ? </h3>
+<h3> What information is encoded in the parameters norm ? </h3>
 
 Assume now that 
 $$
@@ -193,10 +193,27 @@ $$
 P(y^{overfit}_i) \ \ \ \forall i
 $$
 
+The heuristic interpretation that we may get from this observation, is that 
+the norm of the weights is encoding how much information about the data matrix 
+is present in the targets.
+In fact if we evaluate the conditional entropy of the targets given the data we obtain 
+$$
+\begin{align*}
+H(\boldsymbol y | \mathbf X)
+= - \int P(\boldsymbol y | \mathbf X) \log P(\boldsymbol y | \mathbf X) d \boldsymbol y 
+=
+\begin{cases}
+H(\boldsymbol y) & \text{ if } \boldsymbol y = \boldsymbol y_{overfit} \\
+0 & \text{ if } \boldsymbol y = \boldsymbol y_{teacher}
+\end{cases}
+\end{align*}
+$$
+<h3> What's happening in large \(N\) ? </h3>
 
 
 
-We note that in the large \(N\) limit
+We note that in the large \(N/P\) limit we obtain the asymptotic characterization
 $$
 \frac{P}{N} \sim \frac{P}{N - P}
 $$
+which is consistent with the behavior represented in Figure 1.
