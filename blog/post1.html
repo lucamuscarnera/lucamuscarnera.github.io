@@ -6,14 +6,54 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js"
           onload="renderMathInElement(document.body);"></script>
 </head>
+<link rel="stylesheet" type="text/css"
+    href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">
+<style>
+body {
+  font-family: "Computer Modern Sans", sans-serif;
+}
+</style>
 <body>
 
-<p>Inline math: $E=mc^2$</p>
+<center>
+    <h1>
+        Why are large weights associated to overfitting?
+    </h1>
+    <h2 style = "color:rgb(94, 93, 93)">
+        Phenomenology of large norms in trained machine learning models
+    </h2>
+</center>
 
-<p>Display math:</p>
-$$
-\int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}
-$$
 
+<h3> The Linear Interpolant Experiment </h3>
+
+Consider a dataset \(\mathbf X \in \mathbb R^{P\times N}\) in matrix form, such that the i-th row 
+denotes as \(\boldsymbol x_i \in \mathbb R^N\) represent the i-th entry of the dataset.
+In the case \(N > P\), a linear model can always be constructed in order to fit arbitrary targets 
+ \(\boldsymbol y \in \mathbb R^P\) exactly. 
+Namely, we can solve the overparametrized regression problem as follows
+$$
+\hat{\boldsymbol w} = \mathbf X^\top (\mathbf X \mathbf X^\top)^{-1} \boldsymbol y.
+$$
+We now consider two distinct cases. Firstly, consider the case of a random target vector
+$$
+\boldsymbol y_{overfit} \sim \mathcal N(\mathbf 0, \mathbf I_P),
+$$
+then we proceed to compute the expected norm of the weights, starting from the only assumption of isotropy in the target distribution.
+
+$$
+\begin{align*}
+\mathbb E_{\boldsymbol y_{overfit}} \left[ \| \hat{\boldsymbol w} \|^2_2 \right] 
+& = \mathbb E_{\boldsymbol y_{overfit}} \left[  \hat{\boldsymbol w}^\top \hat{\boldsymbol w} \right]  \\
+&= \mathbb E_{\boldsymbol y_{overfit}} \left[ \boldsymbol y_{overfit}^\top (\mathbf X \mathbf X^\top)^{-1} \mathbf X \mathbf X^\top (\mathbf X \mathbf X^\top)^{-1} \boldsymbol y_{overfit} \right] \\
+&= \mathrm{tr} \left( (\mathbf X \mathbf X^\top)^{-1} \mathbf X \mathbf X^\top (\mathbf X \mathbf X^\top)^{-1} \mathbb E_{\boldsymbol y_{overfit}} \left[ \boldsymbol y_{overfit} \bold y_{overfit}^\top \right] \right) \\
+&= \mathrm{tr} \left( (\mathbf X \mathbf X^\top)^{-1} \mathbf X                                                                                     \mathbf X^\top (\mathbf X \mathbf X^\top)^{-1} \right) \\
+&= \mathrm{tr} \left( (\mathbf X \mathbf X^\top)^{-1} \right) \\
+&= \sum_{i=1}^P \frac{1}{\lambda_i} \\
+& \sim \frac{1}{\lambda_{min}}
+\end{align*}
+$$
 </body>
+
+We note an important fact. When targets are completely random, the expected norm of the weights is dominated by the smallest eigenvalue of the Gram matrix \(\mathbf X \mathbf X^\top\).
 </html>
