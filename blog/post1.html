@@ -146,6 +146,11 @@ $$
 \sum_i^P 
 \mathbb E^2_{\boldsymbol v} [\boldsymbol v^\top \boldsymbol w_{teacher}]
 \\
+& \sim 
+\sum_i^P 
+ w_{teacher}^\top
+\mathbb E_{\boldsymbol v} [ \boldsymbol v \boldsymbol v^\top \boldsymbol]  w_{teacher}
+\\
 & 
 \sim 
 \frac{P}{N} 
@@ -156,6 +161,17 @@ $$
 This estimate, as crude as it is, provides as an important insight. 
 In linear models, learning from pure noise forces weights to diverge at the interpolation threshold, while 
 learning from organical targets prevents such divergence, keeping the norm of the weights under control.
+
+
+<center>
+<img src="picture1.png" width = "80%" height = "80%" />
+<br>
+<font size = 1>
+    Figure 1: Empirical verification of the linear interpolant experiment. The plot is a single realization of the experiment, with $N=2000$ in order to diluite finite scale effects.
+    . The data matrix is sampled from a Gaussian distribution. The teacher vector is normalized to unit norm. As predicted by the theory, the norm of the weights diverges at the interpolation threshold when targets are random, while it remains well-behaved when targets are generated from a teacher model.
+    As a side note, note the quality in the prediction of the spherical uniform eigenvectors model.
+</font>
+</center>
 
 <h3> What's happening in large \(N\) ? </h3>
 
@@ -176,7 +192,6 @@ $$
 = 
 P(y^{overfit}_i) \ \ \ \forall i
 $$
-
 
 
 
