@@ -1,6 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* Make the page width fluid */
+  body {
+    margin: 0;
+    padding: 10%;
+    max-width: 100%;
+  }
+
+  /* Images and videos scale automatically */
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Responsive text using clamp() */
+  h1, h2, h3, p {
+    font-size: clamp(1rem, 2vw, 2rem);
+  }
+
+  /* Responsive grid: becomes 1 column on small screens */
+  .responsive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+</style>
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js"
@@ -19,9 +47,9 @@ body {
     <h1>
         Why do we fear large norms in machine learning?
     </h1>
-    <h2 style = "color:rgb(94, 93, 93)">
+    <h3 style = "color:rgb(94, 93, 93)">
         Phenomenology of regularization in trained machine learning models
-    </h2>
+    </h3>
     <h4>Luca Muscarnera</h4>
     <h5>University of Cambridge</h5>
 </center>
