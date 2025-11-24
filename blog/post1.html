@@ -46,7 +46,7 @@ $$
 \mathbb E_{\boldsymbol y_{overfit}} \left[ \| \hat{\boldsymbol w} \|^2_2 \right] 
 & = \mathbb E_{\boldsymbol y_{overfit}} \left[  \hat{\boldsymbol w}^\top \hat{\boldsymbol w} \right]  \\
 &= \mathbb E_{\boldsymbol y_{overfit}} \left[ \boldsymbol y_{overfit}^\top (\mathbf X \mathbf X^\top)^{-1} \mathbf X \mathbf X^\top (\mathbf X \mathbf X^\top)^{-1} \boldsymbol y_{overfit} \right] \\
-&= \mathrm{tr} \left( (\mathbf X \mathbf X^\top)^{-1} \mathbf X \mathbf X^\top (\mathbf X \mathbf X^\top)^{-1} \mathbb E_{\boldsymbol y_{overfit}} \left[ \boldsymbol y_{overfit} \bold y_{overfit}^\top \right] \right) \\
+&= \mathrm{tr} \left( (\mathbf X \mathbf X^\top)^{-1} \mathbf X \mathbf X^\top (\mathbf X \mathbf X^\top)^{-1} \mathbb E_{\boldsymbol y_{overfit}} \left[ \boldsymbol y_{overfit} \boldsymbol y_{overfit}^\top \right] \right) \\
 &= \mathrm{tr} \left( (\mathbf X \mathbf X^\top)^{-1} \mathbf X                                                                                     \mathbf X^\top (\mathbf X \mathbf X^\top)^{-1} \right) \\
 &= \mathrm{tr} \left( (\mathbf X \mathbf X^\top)^{-1} \right) \\
 &= \sum_{i=1}^P \frac{1}{\lambda_i} \\
@@ -56,4 +56,23 @@ $$
 </body>
 
 We note an important fact. When targets are completely random, the expected norm of the weights is dominated by the smallest eigenvalue of the Gram matrix \(\mathbf X \mathbf X^\top\).
+In some sense, the learned vector is inheriting the singularities of the data matrix, which can be very small in high dimension.
+Assuming for instance $\mathbf X$ to be an isotropic random matrix, we can furtherly refine our estimate
+$$
+\begin{align*}
+\mathbb E_{
+    \mathbf X 
+    \sim 
+    \mathcal N(\mathbf 0, \mathbf I_P \otimes \mathbf I_N)
+} 
+\mathbb E_{\boldsymbol y_{overfit}} \left[ \| \hat{\boldsymbol w} \|^2_2 \right]
+ = 
+\mathbb E_{
+    \mathbf X 
+    \sim 
+    \mathcal N(\mathbf 0, \mathbf I_P \otimes \mathbf I_N)
+} \left[ \sum_{i=1}^P \frac{1}{\lambda_i} \right] 
+ = \frac{P}{N - P}
+\end{align*}
+$$ 
 </html>
