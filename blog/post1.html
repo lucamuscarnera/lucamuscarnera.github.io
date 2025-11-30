@@ -121,6 +121,9 @@ $$
     \sim 
     \mathcal N(\mathbf 0, \mathbf I_P \otimes \mathbf I_N)
 } \left[ \sum_{i=1}^P \frac{1}{\lambda_i(\mathbf X \mathbf X^\top)} \right] 
+= 
+\mathbb E
+\text{tr}\left(  (\mathbf X \mathbf X^\top)^{-1} \right )
  = \frac{P}{N - P}
 \end{align*}
 $$ 
@@ -245,3 +248,35 @@ $$
 \frac{P}{N} \sim \frac{P}{N - P}
 $$
 which is consistent with the behavior represented in Figure 1.
+
+<h3> Neural Networks are not Linear Models </h3>
+
+Let us consider the gradient descent dynamics with random targets, where we imagine
+that each sample \(\boldsymbol x_i\) is presented in an online fashion only one time, 
+such that we may assume that \(\boldsymbol \theta\) and \(\boldsymbol x_i\) are independent. 
+
+
+$$
+\begin{align*}
+\mathbb E
+\nabla_{\boldsymbol \theta} \ell(\boldsymbol \theta, \boldsymbol x_i, y^{overfit}_i)
+& = 
+\mathbb E
+    \left( f(\boldsymbol x_i; \boldsymbol \theta) - y^{overfit}_i \right)
+    \nabla_{\boldsymbol \theta} f(\boldsymbol x_i; \boldsymbol \theta)
+\\
+& = 
+     f(\boldsymbol x_i; \boldsymbol \theta)
+    \nabla_{\boldsymbol \theta} f(\boldsymbol x_i; \boldsymbol \theta)
+\\
+& = 
+    \nabla_{\boldsymbol \theta} f^2(\boldsymbol x_i; \boldsymbol \theta)
+    \end{align*}
+$$
+
+<h3> Discussion </h3>
+
+We have shown a simple proof of concept of the behavior of parameter norms in linear models. 
+Somehow, the interpretation of the norm as a capacity metric is justified by our experiment; 
+when data has no structure, the model has to converge to high complexity solutions in order to interpolate 
+the data correctly.
