@@ -92,7 +92,8 @@ then we proceed to compute the expected norm of the weights, starting from the o
 
 $$
 \begin{align*}
-\mathbb E_{\boldsymbol y_{overfit}} \left[ \| \hat{\boldsymbol w} \|^2_2 \right] 
+& \mathbb E_{\boldsymbol y_{overfit}} \left[ \| \hat{\boldsymbol w} \|^2_2 \right] =
+\\
 & = \mathbb E_{\boldsymbol y_{overfit}} \left[  \hat{\boldsymbol w}^\top \hat{\boldsymbol w} \right]  \\
 &= \mathbb E_{\boldsymbol y_{overfit}} \left[ \boldsymbol y_{overfit}^\top (\mathbf X \mathbf X^\top)^{-1} \mathbf X \mathbf X^\top (\mathbf X \mathbf X^\top)^{-1} \boldsymbol y_{overfit} \right] \\
 &= \mathrm{tr} \left( (\mathbf X \mathbf X^\top)^{-1} \mathbf X \mathbf X^\top (\mathbf X \mathbf X^\top)^{-1} \mathbb E_{\boldsymbol y_{overfit}} \left[ \boldsymbol y_{overfit} \boldsymbol y_{overfit}^\top \right] \right) \\
@@ -109,21 +110,24 @@ In some sense, the learned vector is inheriting the singularities of the data ma
 Assuming for instance \(\mathbf X\) to be an isotropic random matrix, we can furtherly refine our estimate
 $$
 \begin{align*}
-\mathbb E_{
+& \mathbb E_{
     \mathbf X 
     \sim 
     \mathcal N(\mathbf 0, \mathbf I_P \otimes \mathbf I_N)
 } 
 \mathbb E_{\boldsymbol y_{overfit}} \left[ \| \hat{\boldsymbol w} \|^2_2 \right]
- = 
+\\
+& = 
 \mathbb E_{
     \mathbf X 
     \sim 
     \mathcal N(\mathbf 0, \mathbf I_P \otimes \mathbf I_N)
 } \left[ \sum_{i=1}^P \frac{1}{\lambda_i(\mathbf X \mathbf X^\top)} \right] 
+\\ &
 = 
 \mathbb E
 \text{tr}\left(  (\mathbf X \mathbf X^\top)^{-1} \right )
+\\ &
  = \frac{P}{N - P}
 \end{align*}
 $$ 
@@ -142,7 +146,8 @@ $$
 \| \hat{\boldsymbol w} \|^2_2 
 &= \hat{\boldsymbol w}^\top \hat{\boldsymbol w}  \\
 &= \boldsymbol y_{teacher}^\top (\mathbf X \mathbf X^\top)^{-1} \mathbf X \mathbf X^\top (\mathbf X \mathbf X^\top)^{-1} \boldsymbol y_{teacher} \\
-&= \boldsymbol w_{teacher}^\top \mathbf X^\top (\mathbf X \mathbf X^\top)^{-1} \mathbf X \mathbf X^\top (\mathbf X \mathbf X^\top)^{-1} \mathbf X^\top \boldsymbol w_{teacher} \\
+&= \boldsymbol w_{teacher}^\top \mathbf X^\top (\mathbf X \mathbf X^\top)^{-1} \mathbf X \mathbf X^\top (\mathbf X \mathbf X^\top)^{-1} \mathbf X \boldsymbol w_{teacher} \\
+&= \boldsymbol w_{teacher}^\top \mathbf X^\top (\mathbf X \mathbf X^\top)^{-1} \mathbf X \boldsymbol w_{teacher} \\
 \end{align*}
 $$
 defining \(\mathbf X = \mathbf U \mathbf \Sigma \mathbf V^\top \) as the SVD decomposition of the data matrix we obtain
@@ -150,15 +155,36 @@ $$
 \begin{align*}
 \| \hat{\boldsymbol w} \|^2_2
 &= \boldsymbol w_{teacher}^\top 
-    \mathbf V \mathbf \Sigma^\top \mathbf U^\top 
-    (\mathbf U \mathbf \Sigma \mathbf V^\top 
-     \mathbf V \mathbf \Sigma \mathbf U^\top)^{-1} 
-    \mathbf U \mathbf \Sigma \mathbf V^\top
-     \mathbf V \mathbf \Sigma \mathbf U^\top
-    (\mathbf U \mathbf \Sigma \mathbf V^\top \mathbf V \mathbf \Sigma \mathbf U^\top)^{-1} \mathbf V \mathbf \Sigma \mathbf U^\top \boldsymbol w_{teacher} \\
-&= \boldsymbol w_{teacher}^\top \mathbf V \mathbf \Sigma^\top (\mathbf \Sigma \mathbf \Sigma^\top)^{-1} \mathbf \Sigma \mathbf V^\top \boldsymbol w_{teacher} \\
-&= \boldsymbol w_{teacher}^\top \mathbf V  \mathbf V^\top \boldsymbol w_{teacher} \\
-&= \| \mathbf V^\top \boldsymbol w_{teacher}  \|^2_2     
+\mathbf V \mathbf \Sigma \mathbf U^\top \left( 
+\mathbf U \mathbf \Sigma \mathbf V^\top 
+\mathbf V \mathbf \Sigma \mathbf U^\top   
+\right)^{-1}
+\mathbf U \mathbf \Sigma \mathbf V^\top 
+\boldsymbol w_{teacher}  
+\\
+&= \boldsymbol w_{teacher}^\top 
+\mathbf V \mathbf \Sigma \mathbf U^\top \left( 
+\mathbf U \mathbf \Sigma^2 \mathbf U^\top   
+\right)^{-1}
+\mathbf U \mathbf \Sigma \mathbf V^\top 
+\boldsymbol w_{teacher}  
+\\
+&= \boldsymbol w_{teacher}^\top 
+\mathbf V \mathbf \Sigma \mathbf U^\top  
+\mathbf U \mathbf \Sigma^{-2} \mathbf U^\top   
+\mathbf U \mathbf \Sigma \mathbf V^\top 
+\boldsymbol w_{teacher}
+\\
+&= \boldsymbol w_{teacher}^\top 
+\mathbf V \mathbf \Sigma  \mathbf \Sigma^{-2}  \mathbf \Sigma \mathbf V^\top 
+\boldsymbol w_{teacher} 
+\\
+&= \boldsymbol w_{teacher}^\top 
+\mathbf V \mathbf V^\top 
+\boldsymbol w_{teacher}  
+\\
+&= \| \mathbf V^\top 
+\boldsymbol w_{teacher}  \|^2_2
 \end{align*}
 $$
 
@@ -204,6 +230,7 @@ learning from organical targets prevents such divergence, keeping the norm of th
 </font>
 </center>
 
+<!--
 <h3> What information is encoded in the parameters norm ? </h3>
 
 Assume now that 
@@ -279,4 +306,60 @@ $$
 We have shown a simple proof of concept of the behavior of parameter norms in linear models. 
 Somehow, the interpretation of the norm as a capacity metric is justified by our experiment; 
 when data has no structure, the model has to converge to high complexity solutions in order to interpolate 
-the data correctly.
+the data correctly. -->
+
+<h3> Randomness as a proxy for complexity </h3>
+The modelling of complex relationships with randomness has a long and successful story in statistics. In general, one may 
+argue that the world where we live the nature of observed randomness is purely epistemic: a part from Quantum effects, this interpretation sees each phenomenon 
+as inherently non random, and the observed disorder is only fruit of, possibly unsolvable, lack of information.
+<br><br>
+Under this framework, we would be interested in evaluating <i>how effective</i> is to model
+complexity in learnable relationships adopting random targets. Is the behavior of a linear model trained 
+to predict more complex relationships qualitatively similar, in its spirit, to the behavior of the same model 
+under random targets?
+<br><br>
+We design a simple experiment to uncover the underlying connection between epistemic uncertainty and the behavior of parameters' norms.
+We consider a dataset \(\boldsymbol x_1,...,\boldsymbol x_P \in \mathbb R^N \), and 
+
+
+<h3> Norms in the RKHS </h3>
+
+Consider a Kernel Ridge Regression problem of the form 
+$$
+\begin{equation}
+\min_{\boldsymbol w \in \mathcal H} \ \ \ 
+\frac{1}{P}
+\sum_i^P
+( \langle \phi(\boldsymbol x_i),\boldsymbol w \rangle_{\mathcal H} - y_i )^2 
+\end{equation}
+$$
+where \(\phi : \mathbb R^N \rightarrow \mathcal H\) is a suitable kernel. 
+Applying the classical kernel trick, we are not able to retrieve the weight vector directly. 
+However, it is still possible to compute its norm exactly as
+$$
+\begin{align*}
+\| \boldsymbol w \|_{\mathcal H}^2
+& = \| \boldsymbol \Phi^\top \left( 
+\boldsymbol \Phi
+\boldsymbol \Phi^\top + \lambda \mathbf I  
+\right)^{-1} \boldsymbol y \|^2_2
+\\
+& =  \left(  \boldsymbol \Phi^\top \left( 
+\boldsymbol \Phi
+\boldsymbol \Phi^\top + \lambda \mathbf I  
+\right)^{-1} \boldsymbol y \right)^\top \boldsymbol \Phi^\top \left( 
+\boldsymbol \Phi
+\boldsymbol \Phi^\top + \lambda \mathbf I  
+\right)^{-1} \boldsymbol y 
+\\
+& =  \boldsymbol y^\top   \left( 
+\boldsymbol \Phi
+\boldsymbol \Phi^\top + \lambda \mathbf I  
+\right)^{-1} 
+\boldsymbol \Phi \boldsymbol \Phi^\top \left( 
+\boldsymbol \Phi
+\boldsymbol \Phi^\top + \lambda \mathbf I  
+\right)^{-1} \boldsymbol y 
+\end{align*}
+$$
+
